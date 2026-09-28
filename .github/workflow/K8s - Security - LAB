@@ -20,20 +20,3 @@ jobs:
       run: |
         kubectl create secret generic db-vault --from-literal=password="${{ secrets.DB_PASSWORD }}"
 
-    # Step 4: Apply your Service Account identity rules (RBAC)
-    - name: Apply RBAC and Service Accounts
-      run: |
-        kubectl apply -f security-rules.yaml
-
-    # Step 5: Deploy your secure application container
-    - name: Deploy Secure Pod
-      run: |
-        kubectl apply -f secure-pod.yaml
-
-    # Step 6: Wait briefly for the pod to boot, then verify the logs to prove success
-    - name: Verify Secure Log Output
-      run: |
-        echo "Waiting for pod to initialize..."
-        kubectl wait --for=condition=Ready pod/secure-app-pod --timeout=60s
-        echo "--- RUNNING CONTAINER LOGS ---"
-        kubectl logs secure-app-pod
